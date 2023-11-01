@@ -2,11 +2,7 @@ package com.mfmea.systemfx.business.dfmea.entity;
 
 import com.mfmea.systemfx.shared.BusinessObject;
 
-import java.time.LocalDate;
-import java.util.UUID;
-
 public class Dfmea extends BusinessObject {
-    private String id;
     private int revision;
     private String originated;
     private String lastUpdated;
@@ -24,7 +20,7 @@ public class Dfmea extends BusinessObject {
                  String description, String system, String subSystem,
                  String component, FmeaStandard fmeaStandard) {
 
-        id = UUID.randomUUID().toString();
+        super();
         this.revision = revision;
         this.originated = originated;
         this.lastUpdated = lastUpdated;
@@ -37,11 +33,6 @@ public class Dfmea extends BusinessObject {
         this.subSystem = subSystem;
         this.component = component;
         this.fmeaStandard = fmeaStandard;
-    }
-
-    @Override
-    public String getId() {
-        return id;
     }
 
     public int getRevision() {
