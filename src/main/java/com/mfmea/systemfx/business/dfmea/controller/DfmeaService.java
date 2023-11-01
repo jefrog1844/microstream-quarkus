@@ -29,27 +29,26 @@ public class DfmeaService extends AbstractService<Dfmea> {
                 .findFirst());
     }
 
-    public Optional<Dfmea> findByName(String name) {
-        Objects.requireNonNull(name, "name is required");
+    public Optional<Dfmea> findByIdNumber(String idNumber) {
+        Objects.requireNonNull(idNumber, "Id Number is required");
 
         return XThreads.executeSynchronized(() -> root.getDfmeas()
                 .stream()
-                .filter(d -> d.getName().equals(name))
+                .filter(d -> d.getIdNumber().equals(idNumber))
                 .findFirst());
     }
-    public Dfmea create(CreateDfmea dfmea) {
+
+    public Dfmea create(Dfmea dfmea) {
         Objects.requireNonNull(dfmea, "dfmea is required");
 
         return XThreads.executeSynchronized(() -> {
-            Optional<Dfmea> byName = findByName(dfmea.getName());
+            Optional<Dfmea> byIdNumber = findByIdNumber(dfmea.getIdNumber());
 
-            if(byName.isPresent()) {
+            if (byIdNumber.isPresent()) {
                 throw new DfmeaAlreadyExistsException();
             }
 
-            return root.addDfmea(new Dfmea(dfmea.getRevision(),dfmea.getOriginated(),
-                    dfmea.getLastUpdated(), dfmea.getName(), dfmea.getProgram(), dfmea.getDescription(),
-                    dfmea.getSystem(), dfmea.getSubSystem(), dfmea.getComponent(), dfmea.getFmeaStandard()));
+            return root.addDfmea(dfmea);
         });
     }
 
@@ -59,7 +58,7 @@ public class DfmeaService extends AbstractService<Dfmea> {
         XThreads.executeSynchronized(() -> {
             Optional<Dfmea> byId = getById(id);
 
-            if(byId.isEmpty()) {
+            if (byId.isEmpty()) {
                 throw new DfmeaDoesNotExistException();
             }
 
@@ -69,12 +68,12 @@ public class DfmeaService extends AbstractService<Dfmea> {
         });
     }
 
-    public Dfmea revise(String id, CreateDfmea dfmea) {
+    public Dfmea revise(String id, Dfmea dfmea) {
 
         return XThreads.executeSynchronized(() -> {
             Optional<Dfmea> byId = getById(id);
 
-            if(byId.isEmpty()) {
+            if (byId.isEmpty()) {
                 throw new DfmeaDoesNotExistException();
             }
 
@@ -82,11 +81,11 @@ public class DfmeaService extends AbstractService<Dfmea> {
 
             int revision = existing.getRevision() + 1;
 
+            dfmea.setRevision(revision);
+
             // TODO kick off deep copy of parts and functions
 
-            return root.addDfmea(new Dfmea(revision, dfmea.getOriginated(),
-                    dfmea.getLastUpdated(), dfmea.getName(), dfmea.getProgram(), dfmea.getDescription(),
-                    dfmea.getSystem(), dfmea.getSubSystem(), dfmea.getComponent(), dfmea.getFmeaStandard()));
+            return root.addDfmea(dfmea);
         });
     }
 }

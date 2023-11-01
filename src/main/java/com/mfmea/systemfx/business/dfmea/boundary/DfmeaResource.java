@@ -51,7 +51,7 @@ public class DfmeaResource {
     @GET
     @Path("/by/{name}")
     public Response findBy(@PathParam("name") String name) {
-        Optional<Dfmea> byName = dfmeaService.findByName(name);
+        Optional<Dfmea> byName = dfmeaService.findByIdNumber(name);
 
         Response.ResponseBuilder builder = byName.map(Response::ok)
                 .orElseGet(() -> Response.status(Response.Status.NOT_FOUND));
@@ -61,7 +61,7 @@ public class DfmeaResource {
     }
 
     @POST
-    public Response create(CreateDfmea dfmea, @Context UriInfo uriInfo) {
+    public Response create(Dfmea dfmea, @Context UriInfo uriInfo) {
         Dfmea savedDfmea = dfmeaService.create(dfmea);
         UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
         uriBuilder.path(savedDfmea.getId());
@@ -70,7 +70,7 @@ public class DfmeaResource {
 
     @PUT
     @Path("{dfmeaId}")
-    public Response revise(@PathParam("dfmeaId") String dfmeaId, CreateDfmea dfmea, @Context UriInfo uriInfo) {
+    public Response revise(@PathParam("dfmeaId") String dfmeaId, Dfmea dfmea, @Context UriInfo uriInfo) {
         Dfmea revisedDfmea = dfmeaService.revise(dfmeaId, dfmea);
         UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
         uriBuilder.path(revisedDfmea.getId());
