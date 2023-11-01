@@ -9,6 +9,8 @@ import jakarta.inject.Inject;
 import one.microstream.reflect.ClassLoaderProvider;
 import one.microstream.storage.embedded.configuration.types.EmbeddedStorageConfiguration;
 import one.microstream.storage.embedded.types.EmbeddedStorageFoundation;
+import one.microstream.storage.restservice.types.StorageRestService;
+import one.microstream.storage.restservice.types.StorageRestServiceResolver;
 import one.microstream.storage.types.StorageManager;
 
 @ApplicationScoped
@@ -16,9 +18,9 @@ public class DataConfiguration {
     private static final System.Logger LOGGER = System.getLogger(DataConfiguration.class.getName());
 
     @Inject
-    @ConfigProperty(name="one.microstream.config")
+    @ConfigProperty(name = "one.microstream.config")
     String microStreamConfiguration;
-    
+
     @Inject
     DataInit dataInit;
 
@@ -66,6 +68,13 @@ public class DataConfiguration {
             storageManager.setRoot(root);
             storageManager.storeRoot();
         }
+
+        // create the REST service
+        StorageRestService service = StorageRestServiceResolver.resolve(storageManager);
+
+        // and start it
+        service.start();
+
         return storageManager;
     }
 
