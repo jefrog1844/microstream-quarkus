@@ -69,6 +69,8 @@ public class DataConfiguration {
             storageManager.storeRoot();
         }
 
+        LOGGER.log(System.Logger.Level.INFO, "(From the App) Starting REST service...");
+
         // create the REST service
         StorageRestService service = StorageRestServiceResolver.resolve(storageManager);
 
