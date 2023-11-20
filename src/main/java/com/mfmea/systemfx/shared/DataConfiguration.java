@@ -18,11 +18,11 @@ public class DataConfiguration {
     private static final System.Logger LOGGER = System.getLogger(DataConfiguration.class.getName());
 
     @Inject
-    @ConfigProperty(name = "one.microstream.config")
-    String microStreamConfiguration;
+    DataInit dataInit;
 
     @Inject
-    DataInit dataInit;
+    @ConfigProperty(name = "one.microstream.config")
+    String microStreamConfiguration;
 
     @Produces
     @ApplicationScoped
@@ -69,8 +69,6 @@ public class DataConfiguration {
             storageManager.storeRoot();
         }
 
-        LOGGER.log(System.Logger.Level.INFO, "(From the App) Starting REST service...");
-
         // create the REST service
         StorageRestService service = StorageRestServiceResolver.resolve(storageManager);
 
@@ -81,7 +79,8 @@ public class DataConfiguration {
     }
 
     private EmbeddedStorageFoundation<?> embeddedStorageFoundation() {
-        return EmbeddedStorageConfiguration.load(microStreamConfiguration)
+        return EmbeddedStorageConfiguration.load(
+                microStreamConfiguration)
                 .createEmbeddedStorageFoundation();
 
     }

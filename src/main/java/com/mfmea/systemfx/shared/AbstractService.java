@@ -1,10 +1,10 @@
 package com.mfmea.systemfx.shared;
 
-import java.util.function.Predicate;
-
 import jakarta.annotation.PostConstruct;
 import jakarta.inject.Inject;
 import one.microstream.storage.types.StorageManager;
+
+import java.util.function.Predicate;
 
 public abstract class AbstractService<T extends BusinessObject> {
 

@@ -1,7 +1,12 @@
 package com.mfmea.systemfx.business.dfmea.entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+import com.mfmea.systemfx.business.hardware.entity.Hardware;
 import com.mfmea.systemfx.shared.BusinessObject;
 
 public class Dfmea extends BusinessObject {
@@ -9,10 +14,9 @@ public class Dfmea extends BusinessObject {
     private String engineeringLocation;
     private String customerName;
     private String modelYearPlatform;
-    private String subject;
     private LocalDate startDate;
     private LocalDate revisionDate;
-    private String crossFunctionalTeam;
+    private Set<String> crossFunctionalTeam = new HashSet<>();
     private String idNumber;
     private String designResponsibility;
     private String confidentialityLevel;
@@ -22,12 +26,14 @@ public class Dfmea extends BusinessObject {
     private FmeaStandard fmeaStandard;
     private String partNumber;
     private int revision;
+    private List<Hardware> hardware = new ArrayList<>();
 
     public Dfmea() {
     }
 
     public Dfmea(String companyName, String engineeringLocation, String customerName, String modelYearPlatform,
-            String subject, LocalDate startDate, LocalDate revisionDate, String crossFunctionalTeam, String idNumber,
+            String subject, LocalDate startDate, LocalDate revisionDate, Set<String> crossFunctionalTeam,
+            String idNumber,
             String designResponsibility, String confidentialityLevel, String system, String subSystem, String component,
             FmeaStandard fmeaStandard, String partNumber, int revision) {
         this.companyName = companyName;
@@ -81,14 +87,6 @@ public class Dfmea extends BusinessObject {
         this.modelYearPlatform = modelYearPlatform;
     }
 
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
     public LocalDate getStartDate() {
         return startDate;
     }
@@ -105,11 +103,11 @@ public class Dfmea extends BusinessObject {
         this.revisionDate = revisionDate;
     }
 
-    public String getCrossFunctionalTeam() {
+    public Set<String> getCrossFunctionalTeam() {
         return crossFunctionalTeam;
     }
 
-    public void setCrossFunctionalTeam(String crossFunctionalTeam) {
+    public void setCrossFunctionalTeam(Set<String> crossFunctionalTeam) {
         this.crossFunctionalTeam = crossFunctionalTeam;
     }
 
@@ -183,6 +181,14 @@ public class Dfmea extends BusinessObject {
 
     public void setRevision(int revision) {
         this.revision = revision;
+    }
+
+    public List<Hardware> getHardware() {
+        return hardware;
+    }
+
+    public void setHardware(List<Hardware> hardware) {
+        this.hardware = hardware;
     }
 
 }

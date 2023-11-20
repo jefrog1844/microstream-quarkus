@@ -4,16 +4,13 @@ import java.util.Collection;
 import java.util.Optional;
 
 import com.mfmea.systemfx.business.dfmea.controller.DfmeaService;
-import com.mfmea.systemfx.business.dfmea.entity.CreateDfmea;
 import com.mfmea.systemfx.business.dfmea.entity.Dfmea;
 
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -23,10 +20,9 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
 import jakarta.ws.rs.core.UriInfo;
 
-@ApplicationScoped
+@Path("/dfmeas")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@Path("/dfmeas")
 public class DfmeaResource {
 
     @Inject
@@ -51,7 +47,7 @@ public class DfmeaResource {
     @GET
     @Path("/by/{name}")
     public Response findBy(@PathParam("name") String name) {
-        Optional<Dfmea> byName = dfmeaService.findByIdNumber(name);
+        Optional<Dfmea> byName = dfmeaService.findByName(name);
 
         Response.ResponseBuilder builder = byName.map(Response::ok)
                 .orElseGet(() -> Response.status(Response.Status.NOT_FOUND));
@@ -66,15 +62,6 @@ public class DfmeaResource {
         UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
         uriBuilder.path(savedDfmea.getId());
         return Response.created(uriBuilder.build()).entity(savedDfmea).build();
-    }
-
-    @PUT
-    @Path("{dfmeaId}")
-    public Response revise(@PathParam("dfmeaId") String dfmeaId, Dfmea dfmea, @Context UriInfo uriInfo) {
-        Dfmea revisedDfmea = dfmeaService.revise(dfmeaId, dfmea);
-        UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
-        uriBuilder.path(revisedDfmea.getId());
-        return Response.created(uriBuilder.build()).entity(revisedDfmea).build();
     }
 
     @DELETE

@@ -1,16 +1,16 @@
 package com.mfmea.systemfx.business.dfmea.controller;
 
-import com.mfmea.systemfx.business.dfmea.entity.CreateDfmea;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
 import com.mfmea.systemfx.business.dfmea.entity.Dfmea;
 import com.mfmea.systemfx.business.dfmea.entity.DfmeaAlreadyExistsException;
 import com.mfmea.systemfx.business.dfmea.entity.DfmeaDoesNotExistException;
 import com.mfmea.systemfx.shared.AbstractService;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import one.microstream.concurrency.XThreads;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @ApplicationScoped
 public class DfmeaService extends AbstractService<Dfmea> {
@@ -29,8 +29,8 @@ public class DfmeaService extends AbstractService<Dfmea> {
                 .findFirst());
     }
 
-    public Optional<Dfmea> findByIdNumber(String idNumber) {
-        Objects.requireNonNull(idNumber, "Id Number is required");
+    public Optional<Dfmea> findByName(String idNumber) {
+        Objects.requireNonNull(idNumber, "name is required");
 
         return XThreads.executeSynchronized(() -> root.getDfmeas()
                 .stream()
@@ -42,9 +42,9 @@ public class DfmeaService extends AbstractService<Dfmea> {
         Objects.requireNonNull(dfmea, "dfmea is required");
 
         return XThreads.executeSynchronized(() -> {
-            Optional<Dfmea> byIdNumber = findByIdNumber(dfmea.getIdNumber());
+            Optional<Dfmea> byidNumber = findByName(dfmea.getIdNumber());
 
-            if (byIdNumber.isPresent()) {
+            if (byidNumber.isPresent()) {
                 throw new DfmeaAlreadyExistsException();
             }
 
@@ -68,24 +68,4 @@ public class DfmeaService extends AbstractService<Dfmea> {
         });
     }
 
-    public Dfmea revise(String id, Dfmea dfmea) {
-
-        return XThreads.executeSynchronized(() -> {
-            Optional<Dfmea> byId = getById(id);
-
-            if (byId.isEmpty()) {
-                throw new DfmeaDoesNotExistException();
-            }
-
-            Dfmea existing = byId.get();
-
-            int revision = existing.getRevision() + 1;
-
-            dfmea.setRevision(revision);
-
-            // TODO kick off deep copy of parts and functions
-
-            return root.addDfmea(dfmea);
-        });
-    }
 }

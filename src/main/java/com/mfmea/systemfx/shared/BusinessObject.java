@@ -1,15 +1,23 @@
 package com.mfmea.systemfx.shared;
 
-import java.util.UUID;
-
 public abstract class BusinessObject {
     private String id;
+    protected String subject;
 
-    public BusinessObject() {
-        this.id = UUID.randomUUID().toString();
-    }
-    
     public String getId() {
         return id;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
 }
