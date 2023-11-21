@@ -3,7 +3,7 @@ package com.mfmea.systemfx.business.dfmea.boundary;
 import java.util.Collection;
 import java.util.Optional;
 
-import com.mfmea.systemfx.business.dfmea.controller.DfmeaService;
+import com.mfmea.systemfx.business.dfmea.controller.DfmeaStorage;
 import com.mfmea.systemfx.business.dfmea.entity.Dfmea;
 
 import jakarta.inject.Inject;
@@ -26,7 +26,7 @@ import jakarta.ws.rs.core.UriInfo;
 public class DfmeaResource {
 
     @Inject
-    DfmeaService dfmeaService;
+    DfmeaStorage dfmeaService;
 
     @GET
     public Collection<Dfmea> getAll() {

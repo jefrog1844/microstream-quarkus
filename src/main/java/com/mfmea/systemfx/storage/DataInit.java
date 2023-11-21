@@ -1,4 +1,4 @@
-package com.mfmea.systemfx.shared;
+package com.mfmea.systemfx.storage;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -7,16 +7,40 @@ import java.util.UUID;
 import com.mfmea.systemfx.business.dfmea.entity.Dfmea;
 import com.mfmea.systemfx.business.dfmea.entity.FmeaStandard;
 import com.mfmea.systemfx.business.hardware.entity.Hardware;
+import com.mfmea.systemfx.shared.ExternalInterface;
+import com.mfmea.systemfx.shared.FailureMode;
+import com.mfmea.systemfx.shared.FailureModeType;
+import com.mfmea.systemfx.shared.Function;
+import com.mfmea.systemfx.shared.HardwareType;
+import com.mfmea.systemfx.shared.InterfaceType;
+import com.mfmea.systemfx.shared.InternalInterface;
+import com.mfmea.systemfx.shared.NoiseFactor;
+import com.mfmea.systemfx.shared.NoiseFactorType;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import one.microstream.integrations.quarkus.types.config.StorageManagerInitializer;
 import one.microstream.storage.types.StorageManager;
 
 @ApplicationScoped
-public class DataInit {
+public class DataInit implements StorageManagerInitializer {
     private static final System.Logger LOGGER = System.getLogger(DataInit.class.getName());
 
-    public void init(Root root, StorageManager storageManager) {
-        LOGGER.log(System.Logger.Level.INFO, "(From the App) Additional configuration on the DataInit");
+    @Override
+    public void initialize(StorageManager storageManager) {
+        // Check Root available within StorageManager
+        Root root = (Root) storageManager.root();
+
+        // Init 'database' with some data
+        if (root.getDfmeas().isEmpty()) {
+            LOGGER.log(System.Logger.Level.INFO, "(From the App) Add basic data the first time");
+            Dfmea initialDfmea = init();
+            root.addDfmea(initialDfmea);
+            storageManager.storeRoot();
+        }
+    }
+
+    private Dfmea init() {
+
         Set<String> team = Set.of("jrogers");
 
         Dfmea d = new Dfmea("companyName", "engineering location", "customer name", "model year platform", "subject",
@@ -82,7 +106,6 @@ public class DataInit {
         f2.setSubject("resist corrosion");
         saltWaterToFlange.getFunctions().add(f2);
 
-        root.addDfmea(d);
+        return d;
     }
-
 }

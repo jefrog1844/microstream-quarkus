@@ -3,17 +3,26 @@ package com.mfmea.systemfx.business.dfmea.controller;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import com.mfmea.systemfx.business.dfmea.entity.Dfmea;
 import com.mfmea.systemfx.business.dfmea.entity.DfmeaAlreadyExistsException;
 import com.mfmea.systemfx.business.dfmea.entity.DfmeaDoesNotExistException;
-import com.mfmea.systemfx.shared.AbstractService;
+import com.mfmea.systemfx.storage.Root;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import one.microstream.concurrency.XThreads;
+import one.microstream.storage.types.StorageManager;
 
 @ApplicationScoped
-public class DfmeaService extends AbstractService<Dfmea> {
+public class DfmeaStorage {
+
+    @Inject
+    Root root;
+
+    @Inject
+    StorageManager storageManager;
 
     public List<Dfmea> getAll() {
         return root.getDfmeas();
@@ -47,8 +56,9 @@ public class DfmeaService extends AbstractService<Dfmea> {
             if (byidNumber.isPresent()) {
                 throw new DfmeaAlreadyExistsException();
             }
-
-            return root.addDfmea(dfmea);
+            root.addDfmea(dfmea);
+            storageManager.store(root.getDfmeas());
+            return dfmea;
         });
     }
 
@@ -62,10 +72,16 @@ public class DfmeaService extends AbstractService<Dfmea> {
                 throw new DfmeaDoesNotExistException();
             }
 
-            byId.ifPresent(theDfmea -> root.removeDfmea(theDfmea));
+            byId.ifPresent(theDfmea -> {
+                root.removeDfmea(theDfmea);
+                storageManager.store(root.getDfmeas());
+            });
 
             return null;
         });
     }
 
+    private Predicate<Dfmea> isIdEquals(final String id) {
+        return o -> o.getId().equals(id);
+    }
 }
