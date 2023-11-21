@@ -50,23 +50,36 @@ public class DataInit implements StorageManagerInitializer {
         Hardware exhaust = new Hardware();
         exhaust.setId(UUID.randomUUID().toString());
         exhaust.setSubject("exhaust");
-        exhaust.setParent(null);
         exhaust.setHardwareType(HardwareType.SYSTEM);
         d.getHardware().add(exhaust);
 
         Hardware flange = new Hardware();
         flange.setId(UUID.randomUUID().toString());
         flange.setSubject("flange");
-        flange.setParent(exhaust);
         flange.setHardwareType(HardwareType.COMPONENT);
+        exhaust.getHardware().add(flange);
         d.getHardware().add(flange);
 
         Hardware elbow = new Hardware();
         elbow.setId(UUID.randomUUID().toString());
         elbow.setSubject("elbow");
-        elbow.setParent(exhaust);
         elbow.setHardwareType(HardwareType.COMPONENT);
+        exhaust.getHardware().add(elbow);
         d.getHardware().add(elbow);
+
+        Hardware muffler = new Hardware();
+        muffler.setId(UUID.randomUUID().toString());
+        muffler.setSubject("muffler");
+        muffler.setHardwareType(HardwareType.ASSEMBLY);
+        exhaust.getHardware().add(muffler);
+        d.getHardware().add(muffler);
+
+        Hardware shell = new Hardware();
+        shell.setId(UUID.randomUUID().toString());
+        shell.setSubject("shell");
+        shell.setHardwareType(HardwareType.COMPONENT);
+        muffler.getHardware().add(shell);
+        d.getHardware().add(shell);
 
         InternalInterface connect = new InternalInterface();
         connect.setId(UUID.randomUUID().toString());

@@ -10,16 +10,13 @@ import com.mfmea.systemfx.shared.IdealResponse;
 import com.mfmea.systemfx.shared.InternalInterface;
 import com.mfmea.systemfx.shared.NoiseFactor;
 
-import jakarta.json.bind.annotation.JsonbTransient;
-
 public class Hardware extends BusinessObject {
     private List<NoiseFactor> noiseFactors = new ArrayList<>();
     private List<InternalInterface> internalInterfaces = new ArrayList<>();
     private List<ExternalInterface> externalInterfaces = new ArrayList<>();
     private List<IdealResponse> idealResponses = new ArrayList<>();
-    @JsonbTransient
-    private Hardware parent;
     private HardwareType hardwareType;
+    private List<Hardware> hardware = new ArrayList<>();
 
     public List<NoiseFactor> getNoiseFactors() {
         return noiseFactors;
@@ -53,20 +50,20 @@ public class Hardware extends BusinessObject {
         this.idealResponses = idealResponses;
     }
 
-    public Hardware getParent() {
-        return parent;
-    }
-
-    public void setParent(Hardware parent) {
-        this.parent = parent;
-    }
-
     public HardwareType getHardwareType() {
         return hardwareType;
     }
 
     public void setHardwareType(HardwareType hardwareType) {
         this.hardwareType = hardwareType;
+    }
+
+    public List<Hardware> getHardware() {
+        return hardware;
+    }
+
+    public void setHardware(List<Hardware> hardware) {
+        this.hardware = hardware;
     }
 
 }
