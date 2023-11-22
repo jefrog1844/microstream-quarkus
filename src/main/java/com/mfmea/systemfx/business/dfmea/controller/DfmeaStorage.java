@@ -3,6 +3,7 @@ package com.mfmea.systemfx.business.dfmea.controller;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Predicate;
 
 import com.mfmea.systemfx.business.dfmea.entity.Dfmea;
@@ -56,6 +57,7 @@ public class DfmeaStorage {
             if (byidNumber.isPresent()) {
                 throw new DfmeaAlreadyExistsException();
             }
+            dfmea.setId(UUID.randomUUID().toString());
             root.addDfmea(dfmea);
             storageManager.store(root.getDfmeas());
             return dfmea;
