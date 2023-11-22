@@ -16,7 +16,7 @@ public class Dfmea extends BusinessObject {
     private String modelYearPlatform;
     private LocalDate startDate;
     private LocalDate revisionDate;
-    private Set<String> crossFunctionalTeam = new HashSet<>();
+    private final Set<String> crossFunctionalTeam = new HashSet<>();
     private String idNumber;
     private String designResponsibility;
     private String confidentialityLevel;
@@ -26,16 +26,15 @@ public class Dfmea extends BusinessObject {
     private FmeaStandard fmeaStandard;
     private String partNumber;
     private int revision;
-    private List<Hardware> hardware = new ArrayList<>();
+    private final List<Hardware> hardware = new ArrayList<>();
 
     public Dfmea() {
     }
 
     public Dfmea(String companyName, String engineeringLocation, String customerName, String modelYearPlatform,
-            String subject, LocalDate startDate, LocalDate revisionDate, Set<String> crossFunctionalTeam,
-            String idNumber,
-            String designResponsibility, String confidentialityLevel, String system, String subSystem, String component,
-            FmeaStandard fmeaStandard, String partNumber, int revision) {
+            String subject, LocalDate startDate, LocalDate revisionDate,
+            String idNumber, String designResponsibility, String confidentialityLevel, String system, String subSystem,
+            String component, FmeaStandard fmeaStandard, String partNumber, int revision) {
         this.companyName = companyName;
         this.engineeringLocation = engineeringLocation;
         this.customerName = customerName;
@@ -43,7 +42,6 @@ public class Dfmea extends BusinessObject {
         this.subject = subject;
         this.startDate = startDate;
         this.revisionDate = revisionDate;
-        this.crossFunctionalTeam = crossFunctionalTeam;
         this.idNumber = idNumber;
         this.designResponsibility = designResponsibility;
         this.confidentialityLevel = confidentialityLevel;
@@ -105,10 +103,6 @@ public class Dfmea extends BusinessObject {
 
     public Set<String> getCrossFunctionalTeam() {
         return crossFunctionalTeam;
-    }
-
-    public void setCrossFunctionalTeam(Set<String> crossFunctionalTeam) {
-        this.crossFunctionalTeam = crossFunctionalTeam;
     }
 
     public String getIdNumber() {
@@ -185,10 +179,6 @@ public class Dfmea extends BusinessObject {
 
     public List<Hardware> getHardware() {
         return hardware;
-    }
-
-    public void setHardware(List<Hardware> hardware) {
-        this.hardware = hardware;
     }
 
 }
