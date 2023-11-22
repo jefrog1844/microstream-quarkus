@@ -1,7 +1,6 @@
 package com.mfmea.systemfx.storage;
 
 import java.time.LocalDate;
-import java.util.Set;
 import java.util.UUID;
 
 import com.mfmea.systemfx.business.dfmea.entity.Dfmea;
@@ -19,6 +18,8 @@ import com.mfmea.systemfx.shared.NoiseFactorType;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import one.microstream.integrations.quarkus.types.config.StorageManagerInitializer;
+import one.microstream.storage.restservice.types.StorageRestService;
+import one.microstream.storage.restservice.types.StorageRestServiceResolver;
 import one.microstream.storage.types.StorageManager;
 
 @ApplicationScoped
@@ -27,6 +28,7 @@ public class DataInit implements StorageManagerInitializer {
 
     @Override
     public void initialize(StorageManager storageManager) {
+        LOGGER.log(System.Logger.Level.INFO, "(From the App) Initializing the application...");
         // Check Root available within StorageManager
         Root root = (Root) storageManager.root();
 
@@ -35,17 +37,23 @@ public class DataInit implements StorageManagerInitializer {
             LOGGER.log(System.Logger.Level.INFO, "(From the App) Add basic data the first time");
             Dfmea initialDfmea = init();
             root.addDfmea(initialDfmea);
-            storageManager.storeRoot();
+            storageManager.store(root.getDfmeas());
         }
+
+        // create the REST service
+        StorageRestService service = StorageRestServiceResolver.resolve(storageManager);
+
+        // and start it
+        service.start();
     }
 
     private Dfmea init() {
 
-        Set<String> team = Set.of("jrogers");
-
         Dfmea d = new Dfmea("companyName", "engineering location", "customer name", "model year platform", "subject",
-                LocalDate.now(), LocalDate.now(), team, "FM-001", "jrogers", "", "", "", "", FmeaStandard.AIAG, "", 0);
+                LocalDate.now(), LocalDate.now(), "FM-001", "jrogers", "", "", "", "", FmeaStandard.AIAG, "", 0);
         d.setId(UUID.randomUUID().toString());
+
+        d.getCrossFunctionalTeam().add("jrogers");
 
         Hardware exhaust = new Hardware();
         exhaust.setId(UUID.randomUUID().toString());
