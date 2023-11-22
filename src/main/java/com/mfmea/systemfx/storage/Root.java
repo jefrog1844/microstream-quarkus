@@ -16,7 +16,7 @@ public class Root {
     }
 
     public List<Dfmea> getDfmeas() {
-        return new ArrayList<>(dfmeas);
+        return dfmeas;
     }
 
     public void addDfmea(Dfmea dfmea) {
